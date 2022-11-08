@@ -9,8 +9,7 @@ import (
 
 func handlerFunc (w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	// fmt.Fprintf(w, r.URL.Path)
-		fmt.Fprintf(w,"To get in touch, please send an email to <a href=\"mailto:support@lenslocked.com \"> support@lenselocked.com </a>.")
+	fmt.Fprintf(w,"To get in touch, please send an email to <a href=\"mailto:support@lenslocked.com \"> support@lenselocked.com </a>.")
 }
 
 
@@ -21,28 +20,29 @@ func home (w http.ResponseWriter, r *http.Request) {
 
 }
 
+func faqPage (w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	fmt.Fprintf(w, "<h1> This is faq page :) </h1>")
+}
 
+ 
 
 func main() {
+	
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", home)
 	r.HandleFunc("/support", handlerFunc)
-
-	// router.GET("/hello/:name", Hello)
-	// http.HandleFunc("/", handlerFunc)
-	// http.ListenAndServe(":3000", nil)
+	r.HandleFunc("/faq", faqPage)
+	
 
 	http.ListenAndServe(":3000",r )
-
-
 }
 
-	/* (":3000", handler)
-	 nil means: we want default serve mux */
+/*
+Exercise 1.
+Add an FAQ page to your application under the path /faq
+This does not need to have a lot of content, but make sure it is different from your pages.
 
 
-	/* fresh for dynamic reload server 
-	 go get github.com/pilu/fresh  */
-
-// for routing we are using github.com/julienschmidt/httprouter
+*/
