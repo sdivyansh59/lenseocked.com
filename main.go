@@ -4,49 +4,36 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/julienschmidt/httprouter"
+	"github.com/gorilla/mux"
 )
 
 func handlerFunc (w http.ResponseWriter, r *http.Request) {
-
 	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprintf(w, r.URL.Path)
-	
-	if(r.URL.Path == "/") {
-		fmt.Fprintf(w,"<h1> Welcome to my  awesome site! </h1>")
-	} else if (r.URL.Path == "/support") {
+	// fmt.Fprintf(w, r.URL.Path)
 		fmt.Fprintf(w,"To get in touch, please send an email to <a href=\"mailto:support@lenslocked.com \"> support@lenselocked.com </a>.")
-	}else{
-	
-		
-		// w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w,"<h1> We did not find what you are looking for :)</h1> <br> please send us a mail.")
-		
-	}
-	
-	
 }
 
-func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-    fmt.Fprint(w, "Welcome!\n")
-}
 
-func Hello(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-    fmt.Fprintf(w, "hello, %s!\n", ps.ByName("name"))
+
+func home (w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	fmt.Fprintf(w,"<h1> Welcome to my  awesome site! </h1>")
+
 }
 
 
 
 func main() {
 
-	router := httprouter.New()
-	router.GET("/", Index)
-	router.GET("/hello/:name", Hello)
-	
+	r := mux.NewRouter()
+	r.HandleFunc("/", home)
+	r.HandleFunc("/support", handlerFunc)
 
+	// router.GET("/hello/:name", Hello)
 	// http.HandleFunc("/", handlerFunc)
 	// http.ListenAndServe(":3000", nil)
-	http.ListenAndServe(":3000",router )
+
+	http.ListenAndServe(":3000",r )
 
 
 }
