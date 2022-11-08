@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/julienschmidt/httprouter"
 )
 
 func handlerFunc (w http.ResponseWriter, r *http.Request) {
@@ -25,19 +27,35 @@ func handlerFunc (w http.ResponseWriter, r *http.Request) {
 	
 }
 
+func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+    fmt.Fprint(w, "Welcome!\n")
+}
+
+func Hello(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+    fmt.Fprintf(w, "hello, %s!\n", ps.ByName("name"))
+}
+
 
 
 func main() {
-	// fmt.Println("Nameste Go!")
-	mux := &http.ServeMux{}
 
-	http.HandleFunc("/", handlerFunc)
+	router := httprouter.New()
+	router.GET("/", Index)
+	router.GET("/hello/:name", Hello)
+	
+
+	// http.HandleFunc("/", handlerFunc)
 	// http.ListenAndServe(":3000", nil)
-	http.ListenAndServe(":3000", mux)
+	http.ListenAndServe(":3000",router )
+
+
+}
 
 	/* (":3000", handler)
 	 nil means: we want default serve mux */
 
+
 	/* fresh for dynamic reload server 
 	 go get github.com/pilu/fresh  */
-}
+
+// for routing we are using github.com/julienschmidt/httprouter
