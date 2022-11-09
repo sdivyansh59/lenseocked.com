@@ -20,22 +20,34 @@ func home (w http.ResponseWriter, r *http.Request) {
 
 }
 
+
+// Ques 1
 func faqPage (w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	fmt.Fprintf(w, "<h1> This is faq page :) </h1>")
+}
+
+
+
+
+func homeNotFoundHandler (w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	fmt.Fprintf(w,"<h1> Caustion : Under Construction site..! </h1>")
+
 }
 
  
 
 func main() {
 	
-
 	r := mux.NewRouter()
+	var h http.Handler = http.HandlerFunc(homeNotFoundHandler)
+
 	r.HandleFunc("/", home)
 	r.HandleFunc("/support", handlerFunc)
 	r.HandleFunc("/faq", faqPage)
 	
-
+	r.NotFoundHandler = h
 	http.ListenAndServe(":3000",r )
 }
 
